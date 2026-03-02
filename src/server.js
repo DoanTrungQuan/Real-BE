@@ -44,7 +44,7 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 
-// ✅ Chỉ cần dòng này - KHÔNG dùng app.options('*', ...)
+// Chỉ cần dòng này - KHÔNG dùng app.options('*', ...)
 app.use(cors(corsOptions));
 
 // ================================
@@ -141,7 +141,7 @@ app.use('/api/stats', statsRoutes);
 
 // 404 Not Found
 app.use((req, res) => {
-  console.log(`❌ 404: ${req.method} ${req.path}`);
+  console.log(`404: ${req.method} ${req.path}`);
   res.status(404).json({
     success: false,
     message: `Route ${req.method} ${req.path} not found`
@@ -150,7 +150,7 @@ app.use((req, res) => {
 
 // Global Error Handler
 app.use((err, req, res, next) => {
-  console.error('❌ Error:', err.message);
+  console.error('Error:', err.message);
 
   // CORS Error
   if (err.message === 'Not allowed by CORS') {
@@ -198,10 +198,10 @@ const startServer = async () => {
     const dbConnected = await testConnection();
 
     if (!dbConnected) {
-      console.error('❌ Database connection failed!');
+      console.error('Database connection failed!');
       console.log('⚠️  Server will start but DB features may not work');
     } else {
-      console.log('✅ Database connected');
+      console.log('Database connected');
     }
 
     // Start server
@@ -217,7 +217,7 @@ const startServer = async () => {
     });
 
   } catch (error) {
-    console.error('❌ Failed to start server:', error);
+    console.error('Failed to start server:', error);
     process.exit(1);
   }
 };
@@ -227,7 +227,7 @@ process.on('SIGINT', () => {
   console.log('\n👋 Shutting down...');
   if (server) {
     server.close(() => {
-      console.log('✅ Server closed');
+      console.log('Server closed');
       process.exit(0);
     });
   } else {

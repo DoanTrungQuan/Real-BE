@@ -17,20 +17,20 @@ async function testLogin() {
   );
 
   if (users.length === 0) {
-    console.log('❌ Admin user not found');
+    console.log('Admin user not found');
     return;
   }
 
   const user = users[0];
   console.log('👤 User found:', user.email);
-  console.log('🔐 Stored hash:', user.password);
+  console.log('Stored hash:', user.password);
 
   // Test password
   const testPassword = 'admin123';
   const isValid = await bcrypt.compare(testPassword, user.password);
   
   console.log(`\n🧪 Testing password: ${testPassword}`);
-  console.log(`✅ Password match: ${isValid}`);
+  console.log(`Password match: ${isValid}`);
 
   if (!isValid) {
     console.log('\n🔧 Generating new hash...');

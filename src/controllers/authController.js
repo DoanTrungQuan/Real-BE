@@ -15,11 +15,11 @@ const generateToken = (user) => {
 // Login user
 exports.login = async (req, res, next) => {
   try {
-    console.log('📥 Login request received:', { email: req.body.email });
+    console.log('Login request received:', { email: req.body.email });
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      console.log('❌ Validation errors:', errors.array());
+      console.log('Validation errors:', errors.array());
       return res.status(400).json({ 
         success: false, 
         message: 'Validation failed', 
@@ -42,12 +42,12 @@ exports.login = async (req, res, next) => {
     }
 
     // Check password
-    console.log('🔐 Checking password...');
+    console.log('Checking password...');
     const isValidPassword = await bcrypt.compare(password, user.password);
-    console.log('🔐 Password valid:', isValidPassword);
+    console.log('Password valid:', isValidPassword);
 
     if (!isValidPassword) {
-      console.log('❌ Invalid password');
+      console.log('Invalid password');
       return res.status(401).json({ 
         success: false, 
         message: 'Invalid email or password' 
@@ -56,7 +56,7 @@ exports.login = async (req, res, next) => {
 
     // Generate token
     const token = generateToken(user);
-    console.log('✅ Login successful for:', user.email);
+    console.log('Login successful for:', user.email);
 
     res.json({
       success: true,
@@ -70,7 +70,7 @@ exports.login = async (req, res, next) => {
       token
     });
   } catch (error) {
-    console.error('❌ Login error:', error);
+    console.error('Login error:', error);
     next(error);
   }
 };
