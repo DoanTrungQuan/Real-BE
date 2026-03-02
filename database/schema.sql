@@ -57,10 +57,15 @@ CREATE TABLE properties (
   title VARCHAR(255) NOT NULL,
   type VARCHAR(50) NOT NULL,
   location TEXT NOT NULL,
+  address VARCHAR(500) NULL,
   city VARCHAR(100) NOT NULL,
+  district VARCHAR(100) NULL,
+  ward VARCHAR(100) NULL,
   state VARCHAR(100) NOT NULL,
   zip_code VARCHAR(20) NULL,
   country VARCHAR(100) DEFAULT 'Việt Nam',
+  latitude DECIMAL(10, 8) NULL,
+  longitude DECIMAL(11, 8) NULL,
   area INT NOT NULL,
   price DECIMAL(15, 2) NOT NULL,
   bedrooms INT DEFAULT 0,
@@ -85,7 +90,8 @@ CREATE TABLE properties (
   INDEX idx_price (price),
   INDEX idx_city (city),
   INDEX idx_seller (seller_id),
-  INDEX idx_featured (is_featured)
+  INDEX idx_featured (is_featured),
+  INDEX idx_location (latitude, longitude)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ================================================
@@ -100,7 +106,7 @@ CREATE TABLE property_amenities (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ================================================
--- Bảng: favorites (Yêu thích của người dùng)
+-- Bảng: favorites (Yêu thích)
 -- ================================================
 CREATE TABLE favorites (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -155,7 +161,7 @@ CREATE TABLE reviews (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ================================================
--- Bảng: transactions (Lịch sử giao dịch)
+-- Bảng: transactions (Giao dịch)
 -- ================================================
 CREATE TABLE transactions (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -179,8 +185,4 @@ CREATE TABLE transactions (
   INDEX idx_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- ================================================
--- Thông báo hoàn thành
--- ================================================
-
-SELECT 'Da tao cau truc co so du lieu thanh cong!' AS Status;
+SELECT 'Đã tạo cấu trúc cơ sở dữ liệu thành công!' AS Status;

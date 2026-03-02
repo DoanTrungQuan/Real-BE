@@ -156,6 +156,8 @@ class Property {
       status: row.status,
       description: row.description,
       sellerId: row.seller_id,
+      latitude: row.latitude ? parseFloat(row.latitude) : null,  
+      longitude: row.longitude ? parseFloat(row.longitude) : null, 
       createdAt: row.created_at?.toISOString().split('T')[0],
       seller: row.seller_name ? {
         id: row.seller_id,

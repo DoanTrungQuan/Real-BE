@@ -31,10 +31,10 @@ exports.login = async (req, res, next) => {
 
     // Find user
     const user = await User.findByEmail(email);
-    console.log('👤 User found:', user ? 'Yes' : 'No');
+    console.log('User found:', user ? 'Yes' : 'No');
 
     if (!user) {
-      console.log('❌ User not found');
+      console.log('User not found');
       return res.status(401).json({ 
         success: false, 
         message: 'Invalid email or password' 

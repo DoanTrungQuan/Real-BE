@@ -7,6 +7,8 @@ const { propertyValidation } = require('../utils/validation');
 // Public routes (authenticated users)
 router.get('/', verifyToken, propertyController.getAllProperties);
 router.get('/search', verifyToken, propertyValidation.search, propertyController.searchProperties);
+router.get('/map', verifyToken,propertyController.getPropertiesForMap);
+router.get('/location',verifyToken, propertyController.getListingsByLocation);
 router.get('/:id', verifyToken, propertyController.getPropertyById);
 
 // Admin only routes

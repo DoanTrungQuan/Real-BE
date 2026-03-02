@@ -146,3 +146,124 @@ exports.deleteProperty = async (req, res, next) => {
     next(error);
   }
 };
+// ================================
+// GET LISTINGS BY LOCATION (MAP)
+// ================================
+exports.getListingsByLocation = async (req, res, next) => {
+    try {
+      const { 
+        lat, 
+        lng, 
+        radius = 10,
+        limit = 50 
+      } = req.query;
+  
+      if (!lat || !lng) {
+        return res.status(400).json({
+          success: false,
+          message: 'Latitude and longitude are required'
+        });
+      }
+  
+      const latitude  = parseFloat(lat);
+      const longitude = parseFloat(lng);
+      const radiusKm  = parseFloat(radius);
+  
+      const query = `
+        SELECT 
+          p.*,
+          s.name  as seller_name,
+          s.phone as seller_phone,
+          (
+            6371 * acos(
+              cos(radians(?)) * cos(radians(latitude)) * 
+              cos(radians(longitude) - radians(?)) + 
+              sin(radians(?)) * sin(radians(latitude))
+            )
+          ) AS distance
+        FROM properties p
+        LEFT JOIN sellers s ON p.seller_id = s.id
+        WHERE p.latitude IS NOT NULL 
+          AND p.longitude IS NOT NULL
+        HAVING distance <= ?
+        ORDER BY distance ASC
+        LIMIT ?
+      `;
+  
+      const [properties] = await db.query(query, [
+        latitude, longitude, latitude, radiusKm, parseInt(limit)
+      ]);
+  
+      res.json({
+        success: true,
+        data: properties,
+        center: { lat: latitude, lng: longitude },
+        radius: radiusKm,
+        count: properties.length
+      });
+  
+    } catch (error) {
+      next(error);
+    }
+  };
+  
+  // ================================
+  // GET ALL PROPERTIES FOR MAP
+  // ================================
+  exports.getPropertiesForMap = async (req, res, next) => {
+    try {
+      const { bounds, status } = req.query;
+  
+      let whereClause = 'WHERE latitude IS NOT NULL AND longitude IS NOT NULL';
+      const params = [];
+  
+      if (bounds) {
+        const { north, south, east, west } = JSON.parse(bounds);
+        whereClause += ' AND latitude BETWEEN ? AND ? AND longitude BETWEEN ? AND ?';
+        params.push(south, north, west, east);
+      }
+  
+      if (status) {
+        whereClause += ' AND status = ?';
+        params.push(status);
+      }
+  
+      const query = `
+        SELECT 
+          id, title, price, latitude, longitude,
+          address, property_type, bedrooms, bathrooms,
+          area, images, status
+        FROM properties
+        ${whereClause}
+        LIMIT 500
+      `;
+  
+      const [properties] = await db.query(query, params);
+  
+      const markers = properties.map(p => ({
+        id: p.id,
+        position: {
+          lat: parseFloat(p.latitude),
+          lng: parseFloat(p.longitude)
+        },
+        title:        p.title,
+        price:        p.price,
+        address:      p.address,
+        propertyType: p.property_type,
+        bedrooms:     p.bedrooms,
+        bathrooms:    p.bathrooms,
+        area:         p.area,
+        image:        p.images ? JSON.parse(p.images)[0] : null,
+        status:       p.status
+      }));
+  
+      res.json({
+        success: true,
+        data: markers,
+        count: markers.length
+      });
+  
+    } catch (error) {
+      next(error);
+    }
+  };
