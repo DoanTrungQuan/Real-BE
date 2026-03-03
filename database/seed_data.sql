@@ -1,13 +1,7 @@
--- ================================================
--- Hệ Thống Quản Lý Bất Động Sản - Dữ Liệu Mẫu
--- Tiếng Việt có dấu + Tọa độ thực tế Việt Nam
--- ================================================
+
 
 USE real_estate_db;
 
--- ================================================
--- Xóa dữ liệu cũ
--- ================================================
 
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE transactions;
@@ -19,10 +13,6 @@ TRUNCATE TABLE properties;
 TRUNCATE TABLE sellers;
 TRUNCATE TABLE users;
 SET FOREIGN_KEY_CHECKS = 1;
-
--- ================================================
--- Thêm Users (50 người dùng)
--- ================================================
 
 INSERT INTO users (name, email, password, role, phone) VALUES
 -- Admin accounts
@@ -115,10 +105,6 @@ INSERT INTO sellers (name, email, phone, company, address, website, license_numb
 ('Phùng Đức Thịnh', 'phung.thinh@luxury.vn', '0987654349', 'Đức Thịnh Luxury Realty', '2600 Mai Chí Thọ, Quận 2, TP.HCM', 'www.ducthinh-luxury.vn', 'BDS-HCM-029', 4.90, 54),
 ('Châu Minh Nhật', 'chau.nhat@group.vn', '0987654350', 'Minh Nhật Estate Group', '2700 Nguyễn Thị Định, Quận 2, TP.HCM', 'www.minhnhat-estates.vn', 'BDS-HCM-030', 4.80, 45);
 
--- ================================================
--- Thêm Properties - Bất động sản (100 BĐS)
--- Với tọa độ thực tế tại Việt Nam
--- ================================================
 
 INSERT INTO properties (title, type, location, address, city, district, ward, state, zip_code, latitude, longitude, area, price, bedrooms, bathrooms, floors, garage, year_built, status, description, seller_id, is_featured) VALUES
 

@@ -146,9 +146,7 @@ exports.deleteProperty = async (req, res, next) => {
     next(error);
   }
 };
-// ================================
-// GET LISTINGS BY LOCATION (MAP)
-// ================================
+
 exports.getListingsByLocation = async (req, res, next) => {
     try {
       const { 
@@ -207,9 +205,7 @@ exports.getListingsByLocation = async (req, res, next) => {
     }
   };
   
-  // ================================
-  // GET ALL PROPERTIES FOR MAP
-  // ================================
+  
   exports.getPropertiesForMap = async (req, res, next) => {
     try {
       const { bounds, status } = req.query;

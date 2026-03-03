@@ -106,7 +106,6 @@ exports.register = async (req, res, next) => {
       name,
       email,
       password: hashedPassword,
-      role: 'admin'
     });
 
     const user = await User.findById(userId);

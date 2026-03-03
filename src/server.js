@@ -4,16 +4,11 @@ require('dotenv').config();
 
 const app = express();
 
-// ================================
-// 1. CORS CONFIGURATION
-// ================================
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Cho phép requests không có origin (Postman, mobile apps, curl)
     if (!origin) return callback(null, true);
     
-    // Danh sách origins được phép
     const allowedOrigins = [
       'http://localhost:3000',
       'http://localhost:3000/login',
@@ -21,7 +16,6 @@ const corsOptions = {
       'http://127.0.0.1:3001'
     ];
     
-    // Trong development cho phép tất cả
     if (process.env.NODE_ENV === 'development') {
       callback(null, true);
     } else if (allowedOrigins.indexOf(origin) !== -1) {
@@ -44,19 +38,10 @@ const corsOptions = {
   optionsSuccessStatus: 204
 };
 
-// Chỉ cần dòng này - KHÔNG dùng app.options('*', ...)
 app.use(cors(corsOptions));
-
-// ================================
-// 2. BODY PARSER MIDDLEWARE
-// ================================
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-// ================================
-// 3. REQUEST LOGGER
-// ================================
 
 app.use((req, res, next) => {
   const timestamp = new Date().toISOString();
@@ -64,10 +49,6 @@ app.use((req, res, next) => {
   console.log(`[${timestamp}] ${req.method} ${req.path} - Origin: ${origin}`);
   next();
 });
-
-// ================================
-// 4. PUBLIC ROUTES
-// ================================
 
 app.get('/', (req, res) => {
   res.json({
@@ -121,9 +102,6 @@ app.get('/api/test', (req, res) => {
   });
 });
 
-// ================================
-// 5. API ROUTES
-// ================================
 
 const authRoutes = require('./routes/authRoutes');
 const propertyRoutes = require('./routes/propertyRoutes');
@@ -135,11 +113,6 @@ app.use('/api/properties', propertyRoutes);
 app.use('/api/sellers', sellerRoutes);
 app.use('/api/stats', statsRoutes);
 
-// ================================
-// 6. ERROR HANDLERS
-// ================================
-
-// 404 Not Found
 app.use((req, res) => {
   console.log(`404: ${req.method} ${req.path}`);
   res.status(404).json({
@@ -183,9 +156,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-// ================================
-// 7. START SERVER
-// ================================
 
 const PORT = process.env.PORT || 5000;
 let server;
@@ -199,7 +169,7 @@ const startServer = async () => {
 
     if (!dbConnected) {
       console.error('Database connection failed!');
-      console.log('⚠️  Server will start but DB features may not work');
+      console.log('Server will start but DB features may not work');
     } else {
       console.log('Database connected');
     }
@@ -207,12 +177,12 @@ const startServer = async () => {
     // Start server
     server = app.listen(PORT, '0.0.0.0', () => {
       console.log('\n' + '='.repeat(60));
-      console.log('🚀 SERVER STARTED SUCCESSFULLY');
+      console.log('SERVER STARTED SUCCESSFULLY');
       console.log('='.repeat(60));
-      console.log(`📍 URL:       http://localhost:${PORT}`);
-      console.log(`🏥 Health:    http://localhost:${PORT}/api/health`);
-      console.log(`🧪 Test:      http://localhost:${PORT}/api/test`);
-      console.log(`🌍 Env:       ${process.env.NODE_ENV || 'development'}`);
+      console.log(`URL:       http://localhost:${PORT}`);
+      console.log(`Health:    http://localhost:${PORT}/api/health`);
+      console.log(`Test:      http://localhost:${PORT}/api/test`);
+      console.log(`Env:       ${process.env.NODE_ENV || 'development'}`);
       console.log('='.repeat(60) + '\n');
     });
 
